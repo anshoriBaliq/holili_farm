@@ -11,6 +11,12 @@ class SensorReadingController extends Controller
     public function index(): JsonResponse
     {
         try {
+            $data = SensorReading::latest('id')->first();
+
+            if (!$data) {
+                return response()->json(['message' => 'No data found'], 404);
+            }
+
             $data = SensorReading::all();
             return response()->json($data, 200);
         } catch (\Exception $e) {

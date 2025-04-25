@@ -13,9 +13,15 @@ return new class extends Migration
     {
         Schema::create('history_logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('summary_id')->constrained('daily_summaries');
+            // $table->foreignId('summary_id')->constrained('daily_summaries');
+            // $table->date('date');
+            // $table->text('log_description');
             $table->date('date');
-            $table->text('log_description');
+            $table->time('time_start');
+            $table->time('time_end');
+            $table->float('avg_temperature');
+            $table->float('avg_ppm');
+            $table->float('avg_water_level');
             $table->timestamps();
         });
     }

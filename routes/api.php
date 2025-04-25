@@ -17,6 +17,10 @@ use App\Http\Controllers\HistoryLogController;
     Route::get('/daily-summaries', [DailySummaryController::class, 'index']);
     Route::post('/daily-summaries', [DailySummaryController::class, 'store']);
     Route::get('/daily-summaries/{date}', [DailySummaryController::class, 'show']);
+    Route::get('/daily-average', [DailySummaryController::class, 'calculateDailyAverage']);
+    Route::get('/detail_history', [DailySummaryController::class, 'calculateTwoHourAverage']);
+    Route::get('/seed-dummy', [DailySummaryController::class, 'seedDummyData']);
+    Route::get('/auto', [DailySummaryController::class, 'runAutomaticSummaries']);
 
     Route::get('/history-logs', [HistoryLogController::class, 'index']);
     Route::post('/history-logs', [HistoryLogController::class, 'store']);
@@ -24,4 +28,4 @@ use App\Http\Controllers\HistoryLogController;
 
     Route::get('/test-api', function () {
         return response()->json(['message' => 'API works!']);
-    }); 
+    });
