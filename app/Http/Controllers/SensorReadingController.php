@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SensorReading;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -41,4 +42,61 @@ class SensorReadingController extends Controller
     {
         return response()->json(SensorReading::findOrFail($id));
     }
+
+    public function weeklyDate()
+    {
+        $starDate = Carbon::now()->subDays(6)->startOfDay(); // 6 hari lalu mulai hari ini
+        $endDate = Carbon::now()->endOfDay(); // hari ini
+
+        $data = SensorReading::whereBetween('recorded_at', [$starDate, $endDate])
+            ->orderBy('recorded_at')
+            ->get()
+            ->groupBy(function($item){
+                return Carbon::parse($item->recorded_at)->format('Y-m-d');
+            })
+            ->map(function ($group) {
+                return $group->sortByDesc('recorded_at')->values();
+            })
+            ->sortKeysDesc(); // urutkan tanggal dari terbaru
+
+        return response()->json([
+            'message' => 'Data Sensor 7 Hari Terakhir',
+            'date' => $data
+        ]);
+    }
+
+
+    public function byDate(Request $request)
+    {
+        $request->validate([
+            'date' => 'required|date_format:Y-m-d',
+        ]);
+
+        $date = Carbon::parse($request->date);
+
+        $data = SensorReading::whereDate('recorded_at', $date)
+            ->orderByDesc('recorded_at')
+            ->get();
+
+        return response()->json([
+            'message' => 'Data Sensor pada Tanggal ' . $date->format('Y-m-d'),
+            'data' => $data
+        ]);
+    }   
+
+
+    public function today()
+    {
+
+        $date = Carbon::today();
+
+        $data = SensorReading::whereDate('recorded_at', $date)
+            ->orderByDesc('recorded_at')
+            ->get();
+
+        return response()->json([
+            'message' => 'Data Sensor pada Tanggal ' . $date->format('Y-m-d'),
+            'data' => $data
+        ]);
+    }   
 }
