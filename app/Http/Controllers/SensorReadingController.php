@@ -31,7 +31,6 @@ class SensorReadingController extends Controller
             'temperature' => 'required|numeric',
             'ppm' => 'required|integer',
             'water_level' => 'required|numeric',
-            'recorded_at' => 'required|date',
         ]);
 
         $reading = SensorReading::create($request->all());

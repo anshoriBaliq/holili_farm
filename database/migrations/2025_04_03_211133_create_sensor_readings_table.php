@@ -16,7 +16,6 @@ return new class extends Migration
             $table->float('temperature');
             $table->integer('ppm');
             $table->float('water_level');
-            $table->dateTime('recorded_at');
             $table->timestamps();
         });
     }
