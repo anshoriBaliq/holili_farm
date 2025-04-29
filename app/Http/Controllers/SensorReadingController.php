@@ -73,8 +73,8 @@ class SensorReadingController extends Controller
 
         $date = Carbon::parse($request->date);
 
-        $data = SensorReading::whereDate('recorded_at', $date)
-            ->orderByDesc('recorded_at')
+        $data = SensorReading::whereDate('created_at', $date)
+            ->orderByDesc('created_at')
             ->get();
 
         return response()->json([
@@ -89,8 +89,8 @@ class SensorReadingController extends Controller
 
         $date = Carbon::today();
 
-        $data = SensorReading::whereDate('recorded_at', $date)
-            ->orderByDesc('recorded_at')
+        $data = SensorReading::whereDate('created_at', $date)
+            ->orderByDesc('created_at')
             ->get();
 
         return response()->json([
