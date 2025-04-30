@@ -47,14 +47,14 @@ class SensorReadingController extends Controller
         $starDate = Carbon::now()->subDays(6)->startOfDay(); // 6 hari lalu mulai hari ini
         $endDate = Carbon::now()->endOfDay(); // hari ini
 
-        $data = SensorReading::whereBetween('recorded_at', [$starDate, $endDate])
-            ->orderBy('recorded_at')
+        $data = SensorReading::whereBetween('created_at', [$starDate, $endDate])
+            ->orderBy('created_at')
             ->get()
             ->groupBy(function($item){
                 return Carbon::parse($item->recorded_at)->format('Y-m-d');
             })
             ->map(function ($group) {
-                return $group->sortByDesc('recorded_at')->values();
+                return $group->sortByDesc('created_at')->values();
             })
             ->sortKeysDesc(); // urutkan tanggal dari terbaru
 
@@ -66,22 +66,22 @@ class SensorReadingController extends Controller
 
 
     public function byDate(Request $request)
-    {
-        $request->validate([
-            'date' => 'required|date_format:Y-m-d',
-        ]);
+        {
+            $request->validate([
+                'date' => 'required|date_format:Y-m-d',
+            ]);
 
-        $date = Carbon::parse($request->date);
+            $date = Carbon::parse($request->date);
 
-        $data = SensorReading::whereDate('created_at', $date)
-            ->orderByDesc('created_at')
-            ->get();
+            $data = SensorReading::whereDate('created_at', $date)
+                ->orderByDesc('created_at')
+                ->get();
 
-        return response()->json([
-            'message' => 'Data Sensor pada Tanggal ' . $date->format('Y-m-d'),
-            'data' => $data
-        ]);
-    }   
+            return response()->json([
+                'message' => 'Data Sensor pada Tanggal ' . $date->format('Y-m-d'),
+                'data' => $data
+            ]);
+        }
 
 
     public function today()
@@ -97,5 +97,25 @@ class SensorReadingController extends Controller
             'message' => 'Data Sensor pada Tanggal ' . $date->format('Y-m-d'),
             'data' => $data
         ]);
-    }   
+    } 
+    
+    public function showByDate(Request $request)
+    {
+        $request->validate([
+            'date' => 'nullable|date_format:Y-m-d',
+        ]);
+
+        // Jika tidak ada input 'date', pakai tanggal hari ini
+        $date = $request->date ? Carbon::parse($request->date) : Carbon::today();
+
+        $data = SensorReading::whereDate('created_at', $date)
+            ->orderByDesc('created_at')
+            ->get();
+
+        return response()->json([
+            'message' => 'Data Sensor pada Tanggal ' . $date->format('Y-m-d'),
+            'data' => $data
+        ]);
+    }
+
 }

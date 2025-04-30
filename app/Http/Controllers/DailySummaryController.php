@@ -109,12 +109,11 @@ class DailySummaryController extends Controller
                     $minute = $i * 30;
                     $time = sprintf('%02d:%02d:00', $hour, $minute);
 
-                    FacadesDB::table('sensor_readings')->insert([
-                        'recorded_at' => Carbon::parse("$date $time"),
+                    FacadesDB::table('sensor_readings')->insert([ 
                         'temperature' => rand(250, 300) / 10, // 25.0 - 30.0
                         'ppm' => rand(1000, 1600),
                         'water_level' => rand(3, 10), // cm
-                        'created_at' => now(),
+                        'created_at' => Carbon::parse("$date $time"),
                         'updated_at' => now(),
                     ]);
                 }

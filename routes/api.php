@@ -16,6 +16,7 @@ use App\Http\Controllers\HistoryLogController;
     Route::get('/history', [SensorReadingController::class, 'weeklyDate']);
     Route::get('/today', [SensorReadingController::class, 'today']);
     Route::post('/history', [SensorReadingController::class, 'byDate']);
+    Route::post('/history/view', [SensorReadingController::class, 'showByDate']);
 
     Route::get('/daily-summaries', [DailySummaryController::class, 'index']);
     Route::post('/daily-summaries', [DailySummaryController::class, 'store']);
