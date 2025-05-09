@@ -34,7 +34,7 @@ class SensorReadingController extends Controller
         ]);
 
         $reading = SensorReading::create($request->all());
-        return response()->json($reading, 201);
+        return response()->json($reading, 200);
     }
 
     public function show($id)

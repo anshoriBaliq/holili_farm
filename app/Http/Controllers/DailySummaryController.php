@@ -43,9 +43,9 @@ class DailySummaryController extends Controller
 
     public function calculateDailyAverage(Request $request)
     {
-        $tanggal = $request->input('tanggal', Carbon::today()->toDateString());
+        $tanggal = $request->input('date', Carbon::today()->toDateString());
 
-        $data = SensorReading::whereDate('recorded_at', $tanggal)->get();
+        $data = SensorReading::whereDate('created_at', $tanggal)->get();
 
         if ($data->isEmpty()) {
             return response()->json(['message' => 'No data found for ' . $tanggal], 404);
